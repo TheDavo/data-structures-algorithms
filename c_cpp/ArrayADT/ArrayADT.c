@@ -100,10 +100,67 @@ struct Array {
 
     return -1;
   }
+
+  int Get(struct Array arr, int index) {
+    if (index >= 0 && index < arr.length) {
+      return arr.A[index];
+    }
+
+    return -1;
+  }
+
+  void Set(struct Array *arr, int index, int newValue) {
+    if (index >= 0 && index < arr->length) {
+      arr->A[index] = newValue;
+    }
+  }
+
+  int Max(struct Array arr) {
+    int max = arr.A[0];
+
+    int i;
+    for (i = 1; i < arr.length; i++) {
+      if ( arr.A[i] > max ) {
+        max = arr.A[i];
+      }
+    }
+    return max;
+  }
+
+  int Min(struct Array arr) {
+    int min = arr.A[0];
+
+    int i;
+    for (i = 1; i < arr.length; i++) {
+      if ( arr.A[i] < min ) {
+        min = arr.A[i];
+      }
+    }
+    return min;
+  }
+
+  int Sum(struct Array arr) {
+    int sum = 0;
+    int i;
+
+    for(i = 0; i < arr.length; i++) {
+      sum += arr.A[i];
+    }
+
+    return sum;
+  }
+
+  float Average(struct Array arr) {
+    int sum = Sum(arr);
+
+    return (float)(sum / arr.length);
+
+  }
+
+
 int main() {
 
   struct Array arr= {{2,3,4,5,6,7,8}, 10, 7};
 
-  printf("Binary Search result: %d", RBinarySearch(arr.A, 0, arr.length - 1, 3));
   return 0;
 }
