@@ -153,14 +153,54 @@ struct Array {
   float Average(struct Array arr) {
     int sum = Sum(arr);
 
-    return (float)(sum / arr.length);
+    return (float)(sum) / arr.length;
 
   }
 
+  void Reverse(struct Array *arr) {
+    int i,j;
+
+    for(i = 0, j = arr->length-1; i < (arr->length-1)/2; i++,j--) {
+      swap(&arr->A[i], &arr->A[j]);
+    }
+  }
+
+  void LeftShift (struct Array *arr, int n) {
+    int i;
+    int len = arr->length;
+
+    for (i = 0; i < len - n; i++) {
+      arr->A[i] = arr->A[i+n];
+    }
+
+    for (i = len - n; i < len; i++) {
+      arr->A[i] = 0;
+    }
+  }
+
+  void RightShift (struct Array *arr, int n) {
+    int i;
+    int len = arr->length;
+
+    for (i = len - 1; i >= n; i--) {
+      arr->A[i] = arr->A[i-n];
+    }
+
+    for (i = n-1; i >= 0; i--) {
+      arr->A[i] = 0;
+    }
+  }
 
 int main() {
 
-  struct Array arr= {{2,3,4,5,6,7,8}, 10, 7};
+  struct Array arr= {{1,2,3,4,5,6,7,8}, 10, 8};
+
+  printf("Average: %.2f \n", Average(arr));
+  
+  Display(arr);
+  RightShift(&arr, 9);
+
+  Display(arr);
 
   return 0;
 }
