@@ -1,10 +1,18 @@
 #include<stdio.h>
+#include<stdlib.h>
 
 struct Array {
   int A[10];
   int size;
   int length;
 };
+
+  void swap(int *x, int *y) {
+    int temp;
+    temp = *x;
+    *x = *y;
+    *y = temp;
+  }
 
   void Display(struct Array arr){
     int i;
@@ -33,6 +41,43 @@ struct Array {
     }
   }
 
+  void InsertSort(struct Array *arr, int value) {
+    int i = arr->length - 1;
+
+    if(arr->length == arr->size) {
+      return;
+    }
+    while (i >=0 && arr->A[i] > value) {
+      arr->A[i+1] = arr->A[i];
+      i--;
+    }
+    arr->A[i+1] = value;
+    arr->length++;
+  }
+
+  int IsSorted(struct Array arr) {
+    int i;
+
+    for (i = arr.length; i > 0; i--) {
+      if (arr.A[i] < arr.A[i-1]) {
+        return 0;
+      }
+    }
+    return 1;
+  }
+
+  void Rearrange(struct Array *arr) {
+    int i, j;
+    i = 0;
+    j = arr->length - 1;
+
+    while (i < j) {
+      while (arr->A[i] < 0) i++;
+      while (arr->A[j] >= 0) j--;
+      if(i < j) swap(&arr->A[i], &arr->A[j]);
+    }
+  }
+
   void Delete(struct Array *arr, int loc) {
     int i;
     if (loc >= 0 && loc <= arr->length) {
@@ -44,12 +89,7 @@ struct Array {
     arr->length--;
   }
 
-  void swap(int *x, int *y) {
-    int temp;
-    temp = *x;
-    *x = *y;
-    *y = temp;
-  }
+
 
   int LinearSearch(struct Array *arr, int searchItem) {
     int i;
@@ -63,6 +103,7 @@ struct Array {
 
     return -1;
   }
+
 
   // Binary search requires that the list is sorted
   int BinarySearch(struct Array arr, int searchItem) {
@@ -191,16 +232,41 @@ struct Array {
     }
   }
 
+  struct Array * MergeSorted(struct Array *arr1, struct Array *arr2) {
+    int i, j, k;
+    i = j = k = 0;
+
+    struct Array *merged = (struct Array *)malloc(sizeof(struct Array));
+    while (i < arr1->length && j < arr2->length) {
+      if(arr1->A[i] < arr2->A[j]) {
+        merged->A[k++] = arr1->A[i++];
+      } else {
+        merged->A[k++] = arr2->A[j++];
+      }
+    }
+
+    for (; i < arr1->length; i++) {
+      merged->A[k++] = arr1->A[i];
+    }
+    for (; j < arr2->length; j++) {
+      merged->A[k++] = arr2->A[j];
+    }
+
+    merged->length = arr1->length + arr2->length;
+    merged->size = arr1->size + arr2->size;
+
+    return merged;
+  }
+
 int main() {
 
-  struct Array arr= {{1,2,3,4,5,6,7,8}, 10, 8};
-
+  struct Array arr= {{1,2,3,4,5,6,7,8}, 10, 5};
+  struct Array arr2= {{9,10,11,12,13,14,15,16}, 10, 5};
   printf("Average: %.2f \n", Average(arr));
   
-  Display(arr);
-  RightShift(&arr, 9);
-
-  Display(arr);
+  struct Array * new_array;
+  new_array = MergeSorted(&arr, &arr2);
+  Display(*new_array);
 
   return 0;
 }
